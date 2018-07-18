@@ -11,7 +11,7 @@ function make_2d_array(cols, rows) {
 
 function random_tile() {
   // todo sample available tiles
-  return floor(random(5));
+  return floor(random(2));
 }
 
 let grid;
@@ -31,26 +31,11 @@ function setup() {
   }
 }
 
-function draw_cell(x, y, entity) {
-  if (entity == Civilization.id) {
-    fill(Civilization.color);
-    stroke(SHOW_CELL_BORDERS ? 0 : Civilization.color);
-    rect(x, y, resolution - 1, resolution - 1);
-  } else if (entity == Dirt.id) {
-    fill(Dirt.color);
-    stroke(SHOW_CELL_BORDERS ? 0 : Dirt.color);
-    rect(x, y, resolution - 1, resolution - 1);
-  } else if (entity == Water.id) {
-    fill(Water.color);
-    stroke(SHOW_CELL_BORDERS ? 0 : Water.color);
-    rect(x, y, resolution - 1, resolution - 1);
-  } else if (entity == Desert.id) {
-    fill(Desert.color);
-    stroke(SHOW_CELL_BORDERS ? 0 : Desert.color);
-    rect(x, y, resolution - 1, resolution - 1);
-  } else if (entity == Forest.id) {
-    fill(Forest.color);
-    stroke(SHOW_CELL_BORDERS ? 0 : Forest.color);
+function draw_cell(x, y, entity_id) {
+  let entity_to_draw = id_to_entity_class(entity_id);
+  if (entity_to_draw !== undefined) {
+    fill(entity_to_draw.color);
+    stroke(SHOW_CELL_BORDERS ? 0 : entity_to_draw.color);
     rect(x, y, resolution - 1, resolution - 1);
   }
 }
@@ -66,18 +51,67 @@ function draw() {
       draw_cell(x, y, dominant_entity);
     }
   }
+
+  update();
 }
 
 function update() {
+  console.log('Updating');
   let next_state = make_2d_array(cols, rows);
 
   // For each cell, follow the rules!
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
-      // For each entitiy on this cell, translate it
-      for (let e = 0; e < grid[i][j].length; e++) {
+      let neighboring_entities = get_neighbors(grid, i, j);
+      let new_entity_list = Array();
 
+      // For each existing entity on this cell, translate it based on its neighbors
+      for (let e = 0; e < grid[i][j].length; e++) {
+        let entity_class = id_to_entity_class(grid[i][j][e]);
+        if (entity_class === undefined) {
+          continue;
+        }
+
+        let new_entities = entity_class.tick(neighboring_entities);
+        if (new_entities !== undefined) {
+          if (!(new_entities.constructor == Array)) {
+            // Convert single-entity responses to an array so we can map over any response for IDs.
+            new_entities = [new_entities];
+          }
+          new_entity_list = new_entity_list.concat(new_entities.map(entity => entity.id));
+        }
+      }
+
+      // For each entity type, see if it can be birthed on this cell
+      let emerging_entities = all_entities();
+      for (let e = 0; e < emerging_entities.length; e++) {
+        let entity_class = emerging_entities[e];
+        let birthed_entities = entity_class.birth(neighboring_entities);
+        if (birthed_entities !== undefined) {
+          if (!(birthed_entities.constructor == Array)) {
+            // Convert single-entity responses to an array so we can map over any response for IDs.
+            birthed_entities = [birthed_entities];
+          }
+          new_entity_list = new_entity_list.concat(birthed_entities.map(entity => entity.id));
+        }
+      }
+
+      grid[i][j] = new_entity_list;
+    }
+  }
+}
+
+function get_neighbors(grid, x, y) {
+  let neighbors = Array();
+  for (let i = -1; i < 2; i++) {
+    for (let j = -1; j < 2; j++) {
+      if (i != x || j != y) {
+        let col = (x + i + cols) % cols;
+        let row = (y + j + rows) % rows;
+
+        neighbors = neighbors.concat(grid[col][row]);
       }
     }
   }
+  return neighbors;
 }

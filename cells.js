@@ -13,11 +13,15 @@ function all_entities() {
   return [Void, Civilization, Dirt, Water];
 }
 
+function landmass_entities() {
+  return [Dirt, Desert, Forest];
+}
+
 function life_entities() {
   return [Void, Civilization];
 }
 
-function world_entities() {
+function initial_world_entities() {
   return [Dirt, Water];
 }
 
@@ -38,7 +42,7 @@ class Void {
     return [0, 0, 0];
   }
 
-  static tick(neighbors) {
+  static tick(current_entities, neighbors) {
     // If there is anything else on this cell, we should remove the void.
     if (neighbors.length > 0) {
       return undefined;
@@ -47,7 +51,11 @@ class Void {
     return Void;
   }
 
-  static birth(neighbors) {
+  static birth(current_entities, neighbors) {
+    if (current_entities.length == 0) {
+      return Void;
+    }
+
     return undefined;
   }
 }
@@ -59,8 +67,9 @@ class Civilization {
     return [255, 255, 255];
   }
 
-  static tick(neighbors) {
+  static tick(current_entities, neighbors) {
     let civilization_neighbors = frequency(neighbors, Civilization.id);
+    let desert_neighbors       = frequency(neighbors, Desert.id);
 
     if (civilization_neighbors < 2) {
       // Die
@@ -72,13 +81,21 @@ class Civilization {
       return undefined;
     }
 
+    if (frequency(current_entities, Water.id) > 0) {
+      // Die
+      return undefined;
+    }
+
+    if (desert_neighbors > 3) {
+      return undefined;
+    }
+
     return Civilization;
   }
 
-  static birth(neighbors)  {
+  static birth(current_entities, neighbors)  {
     let civilization_neighbors = frequency(neighbors, Civilization.id);
-
-    if (civilization_neighbors == 3) {
+    if (civilization_neighbors == 3 && frequency(current_entities, Water.id) == 0) {
       return Civilization;
     }
   }
@@ -91,11 +108,36 @@ class Dirt {
     return [139, 69, 19];
   }
 
-  static tick(neighbors) {
+  static tick(current_entities, neighbors) {
+    let dirt_neighbors   = frequency(neighbors, Dirt.id);
+    let water_neighbors  = frequency(neighbors, Water.id);
+    let forest_neighbors = frequency(neighbors, Forest.id);
+    let desert_neighbors = frequency(neighbors, Desert.id);
+
+    if (dirt_neighbors > 1 && water_neighbors > 0) {
+      return Forest;
+    }
+
+    if (forest_neighbors > 5) {
+      return Forest;
+    }
+
+    if (dirt_neighbors > 6) {
+      return Desert;
+    }
+
+    if (water_neighbors > 5) {
+      return Water;
+    }
+
+    if (desert_neighbors > 6) {
+      return Desert;
+    }
+
     return Dirt;
   }
 
-  static birth(neighbors) {
+  static birth(current_entities, neighbors) {
     return undefined;
   }
 }
@@ -107,12 +149,20 @@ class Water {
     return [0, 0, 255];
   }
 
-  static tick(neighbors) {
+  static tick(current_entities, neighbors) {
+    let water_neighbors  = frequency(neighbors, Water.id);
+
+    if (water_neighbors < 3) {
+      return Dirt;
+    }
+
     return Water;
   }
 
-  static birth(neighbors) {
-    return undefined;
+  static birth(current_entities, neighbors) {
+    if (frequency(neighbors, Water.id) > 6 && frequency(current_entities, Water.id) == 0) {
+      return Water;
+    }
   }
 }
 
@@ -123,11 +173,32 @@ class Desert {
     return [255, 255, 0];
   }
 
-  static tick(neighbors) {
+  static tick(current_entities, neighbors) {
+    let civilization_neighbors = frequency(neighbors, Civilization.id);
+    let water_neighbors        = frequency(neighbors, Water.id);
+    let forest_neighbors       = frequency(neighbors, Forest.id);
+    let dirt_neighbors         = frequency(neighbors, Dirt.id);
+
+    if (water_neighbors > 0) {
+      return Dirt;
+    }
+
+    if (civilization_neighbors > 3) {
+      return Dirt;
+    }
+
+    if (forest_neighbors > 1) {
+      return Dirt;
+    }
+
+    if (dirt_neighbors > 6) {
+      return Dirt;
+    }
+
     return Desert;
   }
 
-  static birth(neighbors) {
+  static birth(current_entities, neighbors) {
     return undefined;
   }
 }
@@ -139,11 +210,32 @@ class Forest {
     return [0, 255, 0];
   }
 
-  static tick(neighbors) {
+  static tick(current_entities, neighbors) {
+    let desert_neighbors       = frequency(neighbors, Desert.id);
+    let forest_neighbors       = frequency(neighbors, Forest.id);
+    let civilization_neighbors = frequency(neighbors, Civilization.id);
+    let water_neighbors        = frequency(neighbors, Water.id);
+
+    if (desert_neighbors > 1) {
+      return Dirt;
+    }
+
+    if (forest_neighbors == 0) {
+      return Dirt;
+    }
+
+    if (water_neighbors > 5) {
+      return Water;
+    }
+
+    if (civilization_neighbors > 2) {
+      return Dirt;
+    }
+
     return Forest;
   }
 
-  static birth(neighbors) {
+  static birth(current_entities, neighbors) {
     return undefined;
   }
 }

@@ -14,25 +14,29 @@ function sample(array) {
 }
 
 let grid;
-let resolution = 20;
-let SHOW_CELL_BORDERS = true;
+let resolution = 35;
+let current_frame_index;
+let SHOW_CELL_BORDERS = false;
 let BACKGROUND_COLOR  = [0, 0, 0];
+let UPDATE_TIMER = 5;
 
 function setup() {
-  createCanvas(800, 600);
-  cols = width / resolution;
-  rows = height / resolution;
+  createCanvas(2400, 2000);
+  cols = round(width / resolution);
+  rows = round(height / resolution);
 
   grid = make_2d_array(cols, rows);
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       // Give a random world tile
-      grid[i][j].push(sample(world_entities()).id);
+      grid[i][j].push(sample(initial_world_entities()).id);
 
       // Give a random life entity
-      //grid[i][j].push(sample(life_entities()).id);
+      grid[i][j].push(sample(life_entities()).id);
     }
   }
+
+  current_frame_index = 0;
 }
 
 function draw_cell(x, y, entity_id) {
@@ -45,22 +49,25 @@ function draw_cell(x, y, entity_id) {
 }
 
 function draw() {
-  background(BACKGROUND_COLOR);
+  current_frame_index++;
+  if (current_frame_index > UPDATE_TIMER) {
+    background(BACKGROUND_COLOR);
+    update();
 
-  for (let i = 0; i < cols; i++) {
-    for (let j = 0; j < rows; j++) {
-      let x = i * resolution;
-      let y = j * resolution;
-      let dominant_entity = grid[i][j][grid[i][j].length - 1];
-      draw_cell(x, y, dominant_entity);
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < rows; j++) {
+        let x = i * resolution;
+        let y = j * resolution;
+        let dominant_entity = grid[i][j][grid[i][j].length - 1];
+        draw_cell(x, y, dominant_entity);
+      }
     }
-  }
 
-  update();
+    current_frame_index = 0;
+  }
 }
 
 function update() {
-  console.log('Updating');
   let next_state = make_2d_array(cols, rows);
 
   // For each cell, follow the rules!
@@ -76,7 +83,7 @@ function update() {
           continue;
         }
 
-        let new_entities = entity_class.tick(neighboring_entities);
+        let new_entities = entity_class.tick(grid[i][j], neighboring_entities);
         if (new_entities !== undefined) {
           if (!(new_entities.constructor == Array)) {
             // Convert single-entity responses to an array so we can map over any response for IDs.
@@ -90,7 +97,7 @@ function update() {
       let emerging_entities = all_entities();
       for (let e = 0; e < emerging_entities.length; e++) {
         let entity_class = emerging_entities[e];
-        let birthed_entities = entity_class.birth(neighboring_entities);
+        let birthed_entities = entity_class.birth(grid[i][j], neighboring_entities);
         if (birthed_entities !== undefined) {
           if (!(birthed_entities.constructor == Array)) {
             // Convert single-entity responses to an array so we can map over any response for IDs.

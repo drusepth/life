@@ -11,6 +11,7 @@
 - Any non-water cell with three civilization neighbors becomes a civilization cell, as if by reproduction.
 
 ## Dirt (brown tiles) [2]
+- Ant dirt cell with at least 1 town neighbor will always remain a dirt cell.
 - Any dirt cell with greater than 1 dirt neighbor and at least 1 water neighbor becomes a forest cell.
 - Any dirt cell with greater than 5 forest neighbors becomes a forest cell.
 - Any dirt cell with greater than 6 dirt neighbors becomes a desert cell.
@@ -27,11 +28,20 @@
 - Any desert cell with greater than 1 forest neighbor becomes a dirt cell.
 - Any desert cell with greater than 6 dirt neighbors becomes a dirt cell.
 
-## Forest (green tiles) [5]
+## Forest (dark green tiles) [5]
 - Any forest cell with greater than 1 desert neighbor becomes a dirt cell.
 - Any forest cell with no forest neighbors becomes a dirt cell.
 - Any forest cell with at least 5 water cells becomes a water cell.
 - Any forest cell with greater than 2 civilization neighbors becomes a dirt cell.
+- Any forest cell with at least 1 town neighbor becomes a dirt cell.
+- Any forest cell on the same tile as a town dies.
+
+## Town (silver tiles) [6]
+- Any town with greater than 5 desert neighbors dies.
+- Any town with any neighboring towns dies.
+- Any town with at least 7 forest neighbors dies.
+- Any town on the same tile as water dies.
+
 
 ## Overlapping tiles
 - Each tile on the world contains an array of entities on it (e.g. civilization, dirt, water, etc). These entities all mutually exist on the same cell.

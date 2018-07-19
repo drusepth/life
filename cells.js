@@ -6,11 +6,12 @@ function id_to_entity_class(id) {
     case Water.id:        return Water;
     case Desert.id:       return Desert;
     case Forest.id:       return Forest;
+    case Town.id:         return Town;
   }
 }
 
 function all_entities() {
-  return [Void, Civilization, Dirt, Water];
+  return [Void, Civilization, Dirt, Water, Forest, Desert, Town];
 }
 
 function landmass_entities() {
@@ -113,6 +114,11 @@ class Dirt {
     let water_neighbors  = frequency(neighbors, Water.id);
     let forest_neighbors = frequency(neighbors, Forest.id);
     let desert_neighbors = frequency(neighbors, Desert.id);
+    let town_neighbors   = frequency(neighbors, Town.id);
+
+    if (town_neighbors > 0) {
+      return Dirt;
+    }
 
     if (dirt_neighbors > 1 && water_neighbors > 0) {
       return Forest;
@@ -215,6 +221,7 @@ class Forest {
     let forest_neighbors       = frequency(neighbors, Forest.id);
     let civilization_neighbors = frequency(neighbors, Civilization.id);
     let water_neighbors        = frequency(neighbors, Water.id);
+    let town_neighbors         = frequency(neighbors, Town.id);
 
     if (desert_neighbors > 1) {
       return Dirt;
@@ -232,10 +239,58 @@ class Forest {
       return Dirt;
     }
 
+    if (town_neighbors > 0) {
+      return Dirt;
+    }
+
+    if (frequency(current_entities, Town.id) > 0) {
+      return undefined;
+    }
+
     return Forest;
   }
 
   static birth(current_entities, neighbors) {
     return undefined;
+  }
+}
+
+class Town {
+  static get id() { return 6; }
+
+  static get color() {
+    return [192, 192, 192];
+  }
+
+  static tick(current_entities, neighbors) {
+    let desert_neighbors   = frequency(neighbors, Desert.id);
+    let town_neighbors     = frequency(neighbors, Town.id);
+    let forest_neighbors   = frequency(neighbors, Forest.id);
+
+    if (desert_neighbors > 5) {
+      return undefined;
+    }
+
+    if (town_neighbors > 0) {
+      return undefined;
+    }
+
+    if (forest_neighbors > 7) {
+      return undefined;
+    }
+
+    if (frequency(current_entities, Water.id) > 0) {
+      return undefined;
+    }
+
+    return Town;
+  }
+
+  static birth(current_entities, neighbors) {
+    let civilization_neighbors = frequency(neighbors, Civilization.id);
+
+    if (civilization_neighbors > 5) {
+      return Town;
+    }
   }
 }

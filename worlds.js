@@ -44,7 +44,7 @@ function draw_cell(x, y, entity_id) {
   let entity_to_draw = id_to_entity_class(entity_id);
   if (entity_to_draw !== undefined) {
     fill(entity_to_draw.color);
-    stroke(SHOW_CELL_BORDERS ? 0 : entity_to_draw.color);
+    stroke(Config.show_cell_borders() ? 0 : entity_to_draw.color);
     rect(x, y, resolution - 1, resolution - 1);
   }
 }

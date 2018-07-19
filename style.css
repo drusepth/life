@@ -1,3 +1,18 @@
 canvas {
   cursor: cell;
 }
+
+#map-legend {
+  list-style-type: none;
+  margin:0;
+  padding:0;
+}
+
+#map-legend li {
+  color: red;
+  font-size: 18px;
+
+  list-style: none;
+  margin:0;
+  padding:0 10px;
+}

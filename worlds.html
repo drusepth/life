@@ -7,10 +7,10 @@
   <link rel="stylesheet" href="style.css">
 
   <script src="p5.min.js"></script>
+  <script src="config.js"></script>
   <script src="cells.js"></script>
   <script src="worlds.js"></script>
   <script src="lib.js"></script>
-  <script src="ui.js"></script>
 
   <title>Andrew's Game of Life</title>
 </head>
@@ -40,19 +40,40 @@
 
 <div id="world" data-toggle="tooltip" data-placement="top" title="&nbsp;"></div>
 
-<div class="card" style="width: 18rem;">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="card-link">Card link</a>
-    <a href="#" class="card-link">Another link</a>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Map legend</h5>
+          <h6 class="card-subtitle mb-2 text-muted">What the colors all mean</h6>
+          <p class="card-text">
+            <ul id="map-legend"></ul>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">General settings</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Tweak the world as a whole</h6>
+          <p class="card-text">
+            <input type="checkbox" id="config-show-grid" />
+            <label for="config-show-grid">
+              Show world grid
+            </label>
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+<script src="ui.js"></script>
 <script type="text/javascript">
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()

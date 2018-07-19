@@ -107,7 +107,7 @@ function update() {
         }
       }
 
-      grid[i][j] = new_entity_list;
+      grid[i][j] = unique(new_entity_list);
     }
   }
 }

@@ -125,6 +125,10 @@ class Dirt {
     let town_neighbors   = frequency(neighbors, Town.id);
     let grass_neighbors  = frequency(neighbors, Grass.id);
 
+    if (frequency(current_entities, Town.id) > 0) {
+      return undefined;
+    }
+
     if (town_neighbors > 0) {
       return Grass;
     }
@@ -319,7 +323,7 @@ class Town {
     let forest_neighbors       = frequency(neighbors, Forest.id);
 
     let has_resource = water_neighbors > 0 || forest_neighbors > 0;
-    if (civilization_neighbors > 7 && town_neighbors == 0 && has_resource) {
+    if (civilization_neighbors > 6 && town_neighbors == 0 && has_resource) {
       return Town;
     }
   }

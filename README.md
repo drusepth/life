@@ -46,7 +46,7 @@
 - Any town with no neighboring civilizations dies.
 - Any town with at least 7 forest neighbors dies.
 - Any town on the same tile as water dies.
-- Any tile with greater than 7 civilization neighbors next to a water or forest tile becomes a town.
+- Any tile with greater than 6 civilization neighbors next to a water or forest tile (and not next to an existing town) becomes a town.
 
 ## Grass (light green tiles) [7]
 - Any grass with greater than 5 civilizations nearby becomes a dirt tile.
@@ -55,4 +55,5 @@
 
 ## Overlapping tiles
 - Each tile on the world contains an array of entities on it (e.g. civilization, dirt, water, etc). These entities all mutually exist on the same cell.
+- All duplicate entities of the same time occupying the same cell will immediately die.
 - The color of the tile shown is the most-recently-added entity on that tile.

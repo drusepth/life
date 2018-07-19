@@ -21,7 +21,8 @@ let BACKGROUND_COLOR  = [0, 0, 0];
 let UPDATE_TIMER = 5;
 
 function setup() {
-  createCanvas(1200, 1000);
+  let canvas = createCanvas($(document).width(), $(document).height() * 0.90);
+  canvas.parent('world');
   cols = round(width / resolution);
   rows = round(height / resolution);
 

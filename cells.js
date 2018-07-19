@@ -31,6 +31,11 @@ class Void {
   }
 
   static tick(neighbors) {
+    // If there is anything else on this cell, we should remove the void.
+    if (neighbors.length > 0) {
+      return undefined;
+    }
+
     return Void;
   }
 

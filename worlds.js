@@ -17,6 +17,7 @@ function random_tile() {
 let grid;
 let resolution = 25;
 let SHOW_CELL_BORDERS = true;
+let BACKGROUND_COLOR  = [0, 0, 0];
 
 function setup() {
   createCanvas(600, 400);
@@ -41,7 +42,7 @@ function draw_cell(x, y, entity_id) {
 }
 
 function draw() {
-  background(0);
+  background(BACKGROUND_COLOR);
 
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
@@ -105,7 +106,7 @@ function get_neighbors(grid, x, y) {
   let neighbors = Array();
   for (let i = -1; i < 2; i++) {
     for (let j = -1; j < 2; j++) {
-      if (i != x || j != y) {
+      if (x + i != x || y + j != y) {
         let col = (x + i + cols) % cols;
         let row = (y + j + rows) % rows;
 

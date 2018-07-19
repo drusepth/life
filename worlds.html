@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css">
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.3/seedrandom.min.js"></script>
   <script src="p5.min.js"></script>
   <script src="config.js"></script>
   <script src="cells.js"></script>
@@ -82,6 +83,20 @@
               Update frequency
               <input type="range" class="custom-range" min="1" max="50" value="25" id="config-update-timer">
             </div>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Save this world</h5>
+          <h6 class="card-subtitle mb-2 text-muted">You can always return later</h6>
+          <p class="card-text">
+            <input type="text" id="config-world-seed" />
           </p>
         </div>
       </div>

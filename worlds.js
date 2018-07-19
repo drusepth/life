@@ -16,9 +16,17 @@ function sample(array) {
 let grid;
 let resolution = 16;
 let current_frame_index;
-let BACKGROUND_COLOR  = [0, 0, 0];
+let BACKGROUND_COLOR = [0, 0, 0];
+let rng_seed;
 
 function setup() {
+  rng_seed = window.location.search.substr(1);
+  if (rng_seed == "") {
+    rng_seed = round(Math.random() * 1e10).toString();
+  }
+  Math.seedrandom(rng_seed);
+  console.log("Seeded with " + rng_seed);
+
   let canvas = createCanvas($(document).width(), $(document).height() * 0.90);
   canvas.parent('world');
   cols = round(width / resolution);

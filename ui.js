@@ -18,6 +18,9 @@ setTimeout(function() {
     // This is a dirty hack that will break if we ever add more tooltips to the page.
     document.getElementsByClassName('tooltip-inner')[0].innerText = tile_entities;
   }, false);
+
+  // Show seed after initialization
+  document.getElementById('config-world-seed').value = rng_seed;
 }, 1000);
 
 // Populate legend

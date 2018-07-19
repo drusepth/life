@@ -36,7 +36,7 @@
 - Any forest cell with greater than 1 desert neighbor becomes a dirt cell.
 - Any forest cell with no forest neighbors becomes a dirt cell.
 - Any forest cell with at least 5 water cells becomes a water cell.
-- Any forest cell with greater than 2 civilization neighbors becomes a dirt cell.
+- Any forest cell with greater than 3 civilization neighbors becomes a dirt cell.
 - Any forest cell with at least 1 town neighbor becomes a dirt cell.
 - Any forest cell on the same tile as a town dies.
 
@@ -52,6 +52,9 @@
 - Any grass with greater than 5 civilizations nearby becomes a dirt tile.
 - Any grass with greater than 3 forest neighbors becomes a forest.
 - Any grass with at least 1 desert neighbor becomes a dirt tile.
+
+## Castle (dark grey tiles) [8]
+- Any tile with 4 town neighbors (making a + or an X pattern) becomes a castle.
 
 ## Overlapping tiles
 - Each tile on the world contains an array of entities on it (e.g. civilization, dirt, water, etc). These entities all mutually exist on the same cell.

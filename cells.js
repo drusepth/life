@@ -8,11 +8,12 @@ function id_to_entity_class(id) {
     case Forest.id:       return Forest;
     case Town.id:         return Town;
     case Grass.id:        return Grass;
+    case Castle.id:       return Castle;
   }
 }
 
 function all_entities() {
-  return [Void, Civilization, Dirt, Water, Forest, Desert, Town];
+  return [Void, Civilization, Dirt, Water, Forest, Desert, Town, Castle];
 }
 
 function landmass_entities() {
@@ -260,7 +261,7 @@ class Forest {
       return Water;
     }
 
-    if (civilization_neighbors > 2) {
+    if (civilization_neighbors > 3) {
       return Dirt;
     }
 
@@ -358,5 +359,26 @@ class Grass {
 
   static birth(current_entities, neighbors) {
     return undefined;
+  }
+}
+
+class Castle {
+  static get id() { return 8; }
+
+  static get color() {
+    return [30, 30, 30];
+  }
+
+  static tick(current_entities, neighbors) {
+    return Castle;
+  }
+
+  static birth(current_entities, neighbors) {
+    let town_neighbors = frequency(neighbors, Town.id);
+
+    if (town_neighbors == 4) {
+      debugger;
+      return Castle;
+    }
   }
 }

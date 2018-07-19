@@ -14,7 +14,7 @@ function sample(array) {
 }
 
 let grid;
-let resolution = 28;
+let resolution = 16;
 let current_frame_index;
 let SHOW_CELL_BORDERS = false;
 let BACKGROUND_COLOR  = [0, 0, 0];

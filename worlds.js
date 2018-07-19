@@ -9,25 +9,28 @@ function make_2d_array(cols, rows) {
   return arr;
 }
 
-function random_tile() {
-  // todo sample available tiles
-  return floor(random(2));
+function sample(array) {
+  return array[Math.floor(Math.random() * array.length)];
 }
 
 let grid;
-let resolution = 25;
+let resolution = 20;
 let SHOW_CELL_BORDERS = true;
 let BACKGROUND_COLOR  = [0, 0, 0];
 
 function setup() {
-  createCanvas(600, 400);
+  createCanvas(800, 600);
   cols = width / resolution;
   rows = height / resolution;
 
   grid = make_2d_array(cols, rows);
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
-      grid[i][j].push(random_tile());
+      // Give a random world tile
+      grid[i][j].push(sample(world_entities()).id);
+
+      // Give a random life entity
+      //grid[i][j].push(sample(life_entities()).id);
     }
   }
 }

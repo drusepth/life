@@ -10,7 +10,15 @@ function id_to_entity_class(id) {
 }
 
 function all_entities() {
-  return [Void, Civilization, Dirt];
+  return [Void, Civilization, Dirt, Water];
+}
+
+function life_entities() {
+  return [Void, Civilization];
+}
+
+function world_entities() {
+  return [Dirt, Water];
 }
 
 function frequency(array, element) {
@@ -93,25 +101,49 @@ class Dirt {
 }
 
 class Water {
-    static get id() { return 3; }
+  static get id() { return 3; }
 
-    static get color() {
-      return [0, 0, 255];
-    }
+  static get color() {
+    return [0, 0, 255];
+  }
+
+  static tick(neighbors) {
+    return Water;
+  }
+
+  static birth(neighbors) {
+    return undefined;
+  }
 }
 
 class Desert {
-    static get id() { return 4; }
+  static get id() { return 4; }
 
-    static get color() {
-      return [255, 255, 0];
-    }
+  static get color() {
+    return [255, 255, 0];
+  }
+
+  static tick(neighbors) {
+    return Desert;
+  }
+
+  static birth(neighbors) {
+    return undefined;
+  }
 }
 
 class Forest {
-    static get id() { return 5; }
+  static get id() { return 5; }
 
-    static get color() {
-      return [0, 255, 0];
-    }
+  static get color() {
+    return [0, 255, 0];
+  }
+
+  static tick(neighbors) {
+    return Forest;
+  }
+
+  static birth(neighbors) {
+    return undefined;
+  }
 }

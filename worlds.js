@@ -14,14 +14,14 @@ function sample(array) {
 }
 
 let grid;
-let resolution = 35;
+let resolution = 28;
 let current_frame_index;
 let SHOW_CELL_BORDERS = false;
 let BACKGROUND_COLOR  = [0, 0, 0];
 let UPDATE_TIMER = 5;
 
 function setup() {
-  createCanvas(2400, 2000);
+  createCanvas(1200, 1000);
   cols = round(width / resolution);
   rows = round(height / resolution);
 

@@ -7,6 +7,7 @@ function id_to_entity_class(id) {
     case Desert.id:       return Desert;
     case Forest.id:       return Forest;
     case Town.id:         return Town;
+    case Grass.id:        return Grass;
   }
 }
 
@@ -96,7 +97,14 @@ class Civilization {
 
   static birth(current_entities, neighbors)  {
     let civilization_neighbors = frequency(neighbors, Civilization.id);
-    if (civilization_neighbors == 3 && frequency(current_entities, Water.id) == 0) {
+    let town_neighbors         = frequency(neighbors, Town.id);
+    let on_a_water_tile        = frequency(current_entities, Water.id) > 0;
+
+    if (civilization_neighbors == 3 && !on_a_water_tile) {
+      return Civilization;
+    }
+
+    if (town_neighbors == 1 && civilization_neighbors < 2 && !on_a_water_tile) {
       return Civilization;
     }
   }
@@ -115,12 +123,17 @@ class Dirt {
     let forest_neighbors = frequency(neighbors, Forest.id);
     let desert_neighbors = frequency(neighbors, Desert.id);
     let town_neighbors   = frequency(neighbors, Town.id);
+    let grass_neighbors  = frequency(neighbors, Grass.id);
 
     if (town_neighbors > 0) {
-      return Dirt;
+      return Grass;
     }
 
     if (dirt_neighbors > 1 && water_neighbors > 0) {
+      return Forest;
+    }
+
+    if (forest_neighbors > 1 && water_neighbors > 0) {
       return Forest;
     }
 
@@ -138,6 +151,14 @@ class Dirt {
 
     if (desert_neighbors > 6) {
       return Desert;
+    }
+
+    if (forest_neighbors > 2) {
+      return Grass;
+    }
+
+    if (grass_neighbors > 6) {
+      return Grass;
     }
 
     return Dirt;
@@ -213,7 +234,7 @@ class Forest {
   static get id() { return 5; }
 
   static get color() {
-    return [0, 255, 0];
+    return [80, 190, 0];
   }
 
   static tick(current_entities, neighbors) {
@@ -263,9 +284,10 @@ class Town {
   }
 
   static tick(current_entities, neighbors) {
-    let desert_neighbors   = frequency(neighbors, Desert.id);
-    let town_neighbors     = frequency(neighbors, Town.id);
-    let forest_neighbors   = frequency(neighbors, Forest.id);
+    let desert_neighbors       = frequency(neighbors, Desert.id);
+    let town_neighbors         = frequency(neighbors, Town.id);
+    let forest_neighbors       = frequency(neighbors, Forest.id);
+    let civilization_neighbors = frequency(neighbors, Civilization.id);
 
     if (desert_neighbors > 5) {
       return undefined;
@@ -283,14 +305,54 @@ class Town {
       return undefined;
     }
 
+    if (civilization_neighbors == 0) {
+      return undefined;
+    }
+
     return Town;
   }
 
   static birth(current_entities, neighbors) {
     let civilization_neighbors = frequency(neighbors, Civilization.id);
+    let town_neighbors         = frequency(neighbors, Town.id);
+    let water_neighbors        = frequency(neighbors, Water.id);
+    let forest_neighbors       = frequency(neighbors, Forest.id);
 
-    if (civilization_neighbors > 5) {
+    let has_resource = water_neighbors > 0 || forest_neighbors > 0;
+    if (civilization_neighbors > 7 && town_neighbors == 0 && has_resource) {
       return Town;
     }
+  }
+}
+
+class Grass {
+  static get id() { return 7; }
+
+  static get color() {
+    return [0, 255, 0];
+  }
+
+  static tick(current_entities, neighbors) {
+    let forest_neighbors       = frequency(neighbors, Forest.id);
+    let desert_neighbors       = frequency(neighbors, Desert.id);
+    let civilization_neighbors = frequency(neighbors, Civilization.id);
+
+    if (civilization_neighbors > 5) {
+      return Dirt;
+    }
+
+    if (forest_neighbors > 3) {
+      return Forest;
+    }
+
+    if (desert_neighbors > 0) {
+      return Dirt;
+    }
+
+    return Grass;
+  }
+
+  static birth(current_entities, neighbors) {
+    return undefined;
   }
 }

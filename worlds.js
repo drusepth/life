@@ -16,9 +16,7 @@ function sample(array) {
 let grid;
 let resolution = 16;
 let current_frame_index;
-let SHOW_CELL_BORDERS = false;
 let BACKGROUND_COLOR  = [0, 0, 0];
-let UPDATE_TIMER = 5;
 
 function setup() {
   let canvas = createCanvas($(document).width(), $(document).height() * 0.90);
@@ -51,7 +49,7 @@ function draw_cell(x, y, entity_id) {
 
 function draw() {
   current_frame_index++;
-  if (current_frame_index > UPDATE_TIMER) {
+  if (current_frame_index > Config.update_frequency()) {
     background(BACKGROUND_COLOR);
     update();
 

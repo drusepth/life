@@ -59,10 +59,29 @@
           <h5 class="card-title">General settings</h5>
           <h6 class="card-subtitle mb-2 text-muted">Tweak the world as a whole</h6>
           <p class="card-text">
-            <input type="checkbox" id="config-show-grid" />
-            <label for="config-show-grid">
-              Show world grid
-            </label>
+            <div>
+              <input type="checkbox" id="config-show-grid" />
+              <label for="config-show-grid">
+                Show world grid
+              </label>
+            </div>
+            <div>
+
+            </div>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Update frequency</h5>
+          <h6 class="card-subtitle mb-2 text-muted">How fast the world evolves</h6>
+          <p class="card-text">
+            <div>
+              Update frequency
+              <input type="range" class="custom-range" min="1" max="50" value="25" id="config-update-timer">
+            </div>
           </p>
         </div>
       </div>

@@ -71,6 +71,7 @@ function draw() {
     }
 
     current_frame_index = 0;
+    frameRate(10);
   }
 }
 
